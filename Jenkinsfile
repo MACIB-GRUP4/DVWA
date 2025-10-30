@@ -25,10 +25,9 @@ pipeline {
                                 -Dsonar.sources=. \
                                 -Dsonar.host.url=http://10.30.212.100:9000 \
                                 -Dsonar.token=$SONAR_AUTH_TOKEN \
-                                -Dsonar.javascript.file.suffixes=-
                                 -Dsonar.javascript.enabled=false \
                                 -Dsonar.typescript.enabled=false \
-                                -Dsonar.css.enabled=false \
+                                -Dsonar.css.enabled=false
                             """
                         }
                     }
