@@ -2,12 +2,11 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_SERVER = 'SonarQube'
-        SONAR_HOST_URL = 'http://10.30.212.100:9000'
-        SONAR_AUTH_TOKEN = credentials('tokenpipe')
+        SONARQUBE_SERVER = 'SonarQube' 
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -17,15 +16,17 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv(SONARQUBE_SERVER) {
-                    script {
-                        def scannerHome = tool 'SonarQubeScanner'
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=testPipeLine \
-                            -Dsonar.sources=. \
-                            -Dsonar.host.url=$SONAR_HOST_URL \
-                            -Dsonar.login=$SONAR_AUTH_TOKEN
-                        """
+                    withCredentials([string(credentialsId: 'tokenpipe', variable: 'SONAR_AUTH_TOKEN')]) {
+                        script {
+                            def scannerHome = tool 'SonarQubeScanner'
+                            sh """
+                                ${scannerHome}/bin/sonar-scanner \
+                                -Dsonar.projectKey=testPipeLine \
+                                -Dsonar.sources=. \
+                                -Dsonar.host.url=http://10.30.212.100:9000 \
+                                -Dsonar.login=$SONAR_AUTH_TOKEN
+                            """
+                        }
                     }
                 }
             }
