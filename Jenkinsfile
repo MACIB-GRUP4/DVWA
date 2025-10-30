@@ -4,7 +4,7 @@ pipeline {
     environment {
         SONARQUBE_SERVER = 'SonarQube'
         SONAR_HOST_URL = 'http://10.30.212.100:9000'
-        SONAR_AUTH_TOKEN = credentials('sonarqube-token')
+        SONAR_AUTH_TOKEN = credentials('tokenpipe')
     }
 
     stages {
