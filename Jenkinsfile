@@ -24,7 +24,8 @@ pipeline {
                                 -Dsonar.projectKey=testPipeLine \
                                 -Dsonar.sources=. \
                                 -Dsonar.host.url=http://10.30.212.100:9000 \
-                                -Dsonar.login=$SONAR_AUTH_TOKEN
+                                -Dsonar.token=$SONAR_AUTH_TOKEN \
+                                -Dsonar.javascript.file.suffixes=-
                             """
                         }
                     }
