@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_SERVER = 'SonarQube' 
+        SONARQUBE_SERVER = 'SonarQube'
     }
 
     stages {
@@ -39,6 +39,22 @@ pipeline {
             steps {
                 timeout(time: 1, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage('DAST Scan with OWASP ZAP') {
+            steps {
+                echo "Iniciando escaneo DAST con ZAP..."
+                sh '''
+                    docker exec zap zap.sh -cmd -quickurl http://dvwa:80 -quickout /zap/wrk/report.html
+                '''
+            }
+            post {
+                always {
+                    echo "Exportando reporte del escaneo"
+                    sh 'docker cp zap:/zap/wrk/report.html .'
+                    archiveArtifacts artifacts: 'report.html', fingerprint: true
                 }
             }
         }
